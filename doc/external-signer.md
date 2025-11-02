@@ -78,6 +78,28 @@ Prerequisite knowledge:
 * [Output Descriptors](descriptors.md)
 * Partially Signed Bitcoin Transaction ([PSBT](psbt.md))
 
+### Flag `--stdin` (required)
+
+Usage:
+```
+$ <cmd> --stdin
+[…IPC interaction written to stdin…]
+```
+
+#### IPC-command `signtx` (required)
+
+```
+signtx "<Base64-encoded PSBT-content>"
+```
+
+`signtx` indicates a PSBT signing request, followed by Base64-encoded PSBT-content. Quotes are optional, added in more recent versions. Semantically there is no difference, as Base64-encoded content is an uninterrupted sequence of characters regardless.
+
+The command returns a PSBT with any signatures.
+
+PSBT-content SHOULD include bip32 derivations. The command SHOULD fail if none of the bip32 derivations match a key owned by the device.
+
+The command SHOULD fail if the user cancels.
+
 ### `enumerate` (required)
 
 Usage:
@@ -97,6 +119,8 @@ A future extension could add an optional return field with device capabilities. 
 A future extension could add an optional return field `reachable`, in case `<cmd>` knows a signer exists but can't currently reach it.
 
 ### `signtransaction` (required)
+
+__Note__: `signtransaction` is no longer the primary mechanism for issuing a signing-request to an external signer. See flag `--stdin` for IPC with external signer.
 
 Usage:
 ```
