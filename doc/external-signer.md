@@ -83,16 +83,16 @@ Prerequisite knowledge:
 Usage:
 ```
 $ <cmd> --stdin
-[…IPC interaction written to stdin…]
+[…command and arguments written to stdin…]
 ```
 
-#### IPC-command `signtx` (required)
+#### stdin-command `signtx` (required)
 
 ```
 signtx "<Base64-encoded PSBT-content>"
 ```
 
-`signtx` indicates a PSBT signing request, followed by Base64-encoded PSBT-content. Quotes are optional, added in more recent versions. Semantically there is no difference, as Base64-encoded content is an uninterrupted sequence of characters regardless.
+`signtx` indicates a PSBT-signing-request, followed by Base64-encoded PSBT-content. Quotes are optional, added in more recent versions. Semantically there is no difference, as Base64-encoded content is an uninterrupted sequence of characters regardless.
 
 The command returns a PSBT with any signatures.
 
@@ -117,24 +117,6 @@ The command MUST return an (empty) array with at least a `fingerprint` field.
 A future extension could add an optional return field with device capabilities. Perhaps a descriptor with wildcards. For example: `["pkh("44'/0'/$'/{0,1}/*"), sh(wpkh("49'/0'/$'/{0,1}/*")), wpkh("84'/0'/$'/{0,1}/*")]`. This would indicate the device supports legacy, wrapped SegWit and native SegWit. In addition it restricts the derivation paths that can used for those, to maintain compatibility with other wallet software. It also indicates the device, or the driver, doesn't support multisig.
 
 A future extension could add an optional return field `reachable`, in case `<cmd>` knows a signer exists but can't currently reach it.
-
-### `signtransaction` (required)
-
-__Note__: `signtransaction` is no longer the primary mechanism for issuing a signing-request to an external signer. See flag `--stdin` for IPC with external signer.
-
-Usage:
-```
-$ <cmd> --fingerprint=<fingerprint> (--testnet) signtransaction <psbt>
-base64_encode_signed_psbt
-```
-
-The command returns a psbt with any signatures.
-
-The `psbt` SHOULD include bip32 derivations. The command SHOULD fail if none of the bip32 derivations match a key owned by the device.
-
-The command SHOULD fail if the user cancels.
-
-The command MAY complain if `--testnet` is set, but any of the BIP32 derivation paths contain a coin type other than `1h` (and vice versa).
 
 ### `getdescriptors` (optional)
 
